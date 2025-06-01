@@ -16,7 +16,6 @@ OrrerySQL은 복잡한 SQL 쿼리를 직관적으로 분석하고 이해할 수 
 - **CTE 분석**: WITH 절과 서브쿼리의 복잡한 관계 해석
 
 ### 🎨 **사용자 친화적 인터페이스**
-- **다크/라이트 테마**: 개발자 취향에 맞는 테마 선택
 - **다국어 지원**: 한국어/영어 동적 전환
 - **SQL 구문 강조**: 키워드, 테이블명, 컬럼명 하이라이팅
 - **자동 완성**: 테이블과 컬럼명 기반 인텔리센스
@@ -155,7 +154,7 @@ ORDER BY s.total_sales DESC;
 
 ## 👥 개발팀
 
-- **Main Developer**: [Your Name]
+- **Main Developer**: SungHyung-Lim & LLMs
 - **SQL Analysis Engine**: Advanced AST parsing with sqlglot
 - **UI/UX Design**: Modern dark theme with PySide6
 
