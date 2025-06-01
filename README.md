@@ -8,6 +8,9 @@ OrrerySQL is a GUI-based SQL development environment that helps you intuitively 
 ![PyQt6](https://img.shields.io/badge/GUI-PySide6-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
+
+https://github.com/LimSung-Hyung/OrrerySQL/releases/tag/v1.0.0
+
 ## ✨ Key Features
 
 ### 🔍 **SQL Query Analysis**
