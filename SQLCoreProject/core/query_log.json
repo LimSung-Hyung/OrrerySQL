@@ -1,0 +1,113 @@
+[
+  {
+    "timestamp": "2025-05-28 20:41:45",
+    "query": "WITH recent_medical AS (\n    SELECT id, type, date\n    FROM medical\n    WHERE date > '2025-01-01'\n)\n\nSELECT p.id, p.name, p.birth, p.team, p.line, r.type, r.date\nFROM people AS p\nLEFT JOIN recent_medical AS r ON p.id = r.id\nORDER BY p.id",
+    "summary": {
+      "row_count": 459,
+      "columns": [
+        "id",
+        "name",
+        "birth",
+        "team",
+        "line",
+        "type",
+        "date"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-05-29 19:13:31",
+    "query": "WITH last_medical AS (\n    SELECT\n        id,\n        MAX(date) AS last_medical_date\n    FROM medical\n    GROUP BY id\n),\nregular_medical AS (\n    SELECT\n        id,\n        COUNT(*) AS total_medical,\n        SUM(CASE WHEN type = '정기' THEN 1 ELSE 0 END) AS regular_count\n    FROM medical\n    GROUP BY id\n),\nfirst_joiner AS (\n    SELECT\n        team,\n        MIN(join_date) AS first_join_date\n    FROM people\n    WHERE team IS NOT NULL AND team <> ''\n    GROUP BY team\n),\nmedical_stats AS (\n    SELECT\n        id,\n        COUNT(*) AS all_medical_count,\n        SUM(CASE WHEN type = '정기' THEN 1 ELSE 0 END) AS 정기_건수,\n        SUM(CASE WHEN type = '특수' THEN 1 ELSE 0 END) AS 특수_건수,\n        SUM(CASE WHEN result = '이상' THEN 1 ELSE 0 END) AS 이상_결과수\n    FROM medical\n    GROUP BY id\n),\nrecent_regular AS (\n    SELECT\n        id,\n        MAX(date) AS 최근_정기검진일\n    FROM medical\n    WHERE type = '정기'\n    GROUP BY id\n),\nteam_medical_rate AS (\n    SELECT\n        p.team,\n        COUNT(DISTINCT m.id) AS 대상자수,\n        SUM(CASE WHEN m.id IS NOT NULL THEN 1 ELSE 0 END) AS 검진이력_보유자,\n        ROUND(100.0 * SUM(CASE WHEN m.id IS NOT NULL THEN 1 ELSE 0 END) / COUNT(DISTINCT m.id), 2) AS 검진비율\n    FROM people p\n    LEFT JOIN medical m ON p.id = m.id\n    WHERE p.team IS NOT NULL AND p.team <> ''\n    GROUP BY p.team\n)\nSELECT\n    p.id,\n    p.name,\n    p.birth,\n    p.join_date,\n    p.retire_date,\n    p.team,\n    p.line,\n    p.position,\n    COALESCE(lm.last_medical_date, '') AS last_medical_date,\n    COALESCE(rm.total_medical, 0) AS total_medical,\n    COALESCE(rm.regular_count, 0) AS regular_medical_count,\n    COALESCE(ms.all_medical_count, 0) AS all_medical_count,\n    COALESCE(ms.정기_건수, 0) AS 정기_건수,\n    COALESCE(ms.특수_건수, 0) AS 특수_건수,\n    COALESCE(ms.이상_결과수, 0) AS 이상_결과수,\n    COALESCE(rr.최근_정기검진일, '') AS 최근_정기검진일,\n    CASE\n        WHEN ms.정기_건수 = 0 THEN '정기검진누락'\n        ELSE ''\n    END AS 정기검진_경고,\n    CASE\n        WHEN ms.이상_결과수 > 0 THEN '이상소견있음'\n        ELSE ''\n    END AS 이상_경고,\n    f.first_join_date AS 팀최초입사일,\n    tm.대상자수 AS 팀인원수,\n    tm.검진이력_보유자,\n    tm.검진비율\nFROM people p\nLEFT JOIN last_medical lm ON p.id = lm.id\nLEFT JOIN regular_medical rm ON p.id = rm.id\nLEFT JOIN medical_stats ms ON p.id = ms.id\nLEFT JOIN recent_regular rr ON p.id = rr.id\nLEFT JOIN first_joiner f ON p.team = f.team\nLEFT JOIN team_medical_rate tm ON p.team = tm.team\nWHERE p.team IS NOT NULL AND p.team <> ''\nORDER BY\n    정기검진_경고 DESC,\n    이상_경고 DESC,\n    p.team ASC,\n    p.name ASC\nLIMIT 100;\n",
+    "summary": {
+      "row_count": 100,
+      "columns": [
+        "id",
+        "name",
+        "birth",
+        "join_date",
+        "retire_date",
+        "team",
+        "line",
+        "position",
+        "last_medical_date",
+        "total_medical",
+        "regular_medical_count",
+        "all_medical_count",
+        "정기_건수",
+        "특수_건수",
+        "이상_결과수",
+        "최근_정기검진일",
+        "정기검진_경고",
+        "이상_경고",
+        "팀최초입사일",
+        "팀인원수",
+        "검진이력_보유자",
+        "검진비율"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-05-30 20:08:31",
+    "query": "SELECT * FROM people",
+    "summary": {
+      "row_count": 260,
+      "columns": [
+        "id",
+        "name",
+        "birth",
+        "join_date",
+        "retire_date",
+        "team",
+        "line",
+        "position"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-05-30 20:15:49",
+    "query": "WITH recent_medical AS (\n    SELECT id, type, date\n    FROM medical\n    WHERE date > '2025-01-01'\n)\n\nSELECT p.id, p.name, p.birth, p.team, p.line, r.type, r.date\nFROM people AS p\nLEFT JOIN recent_medical AS r ON p.id = r.id\nORDER BY p.id",
+    "summary": {
+      "row_count": 459,
+      "columns": [
+        "id",
+        "name",
+        "birth",
+        "team",
+        "line",
+        "type",
+        "date"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-05-30 20:18:17",
+    "query": "WITH last_medical AS (\n    SELECT\n        id,\n        MAX(date) AS last_medical_date\n    FROM medical\n    GROUP BY id\n),\nregular_medical AS (\n    SELECT\n        id,\n        COUNT(*) AS total_medical,\n        SUM(CASE WHEN type = '정기' THEN 1 ELSE 0 END) AS regular_count\n    FROM medical\n    GROUP BY id\n),\nfirst_joiner AS (\n    SELECT\n        team,\n        MIN(join_date) AS first_join_date\n    FROM people\n    WHERE team IS NOT NULL AND team <> ''\n    GROUP BY team\n),\nmedical_stats AS (\n    SELECT\n        id,\n        COUNT(*) AS all_medical_count,\n        SUM(CASE WHEN type = '정기' THEN 1 ELSE 0 END) AS 정기_건수,\n        SUM(CASE WHEN type = '특수' THEN 1 ELSE 0 END) AS 특수_건수,\n        SUM(CASE WHEN result = '이상' THEN 1 ELSE 0 END) AS 이상_결과수\n    FROM medical\n    GROUP BY id\n),\nrecent_regular AS (\n    SELECT\n        id,\n        MAX(date) AS 최근_정기검진일\n    FROM medical\n    WHERE type = '정기'\n    GROUP BY id\n),\nteam_medical_rate AS (\n    SELECT\n        p.team,\n        COUNT(DISTINCT m.id) AS 대상자수,\n        SUM(CASE WHEN m.id IS NOT NULL THEN 1 ELSE 0 END) AS 검진이력_보유자,\n        ROUND(100.0 * SUM(CASE WHEN m.id IS NOT NULL THEN 1 ELSE 0 END) / COUNT(DISTINCT m.id), 2) AS 검진비율\n    FROM people p\n    LEFT JOIN medical m ON p.id = m.id\n    WHERE p.team IS NOT NULL AND p.team <> ''\n    GROUP BY p.team\n)\nSELECT\n    p.id,\n    p.name,\n    p.birth,\n    p.join_date,\n    p.retire_date,\n    p.team,\n    p.line,\n    p.position,\n    COALESCE(lm.last_medical_date, '') AS last_medical_date,\n    COALESCE(rm.total_medical, 0) AS total_medical,\n    COALESCE(rm.regular_count, 0) AS regular_medical_count,\n    COALESCE(ms.all_medical_count, 0) AS all_medical_count,\n    COALESCE(ms.정기_건수, 0) AS 정기_건수,\n    COALESCE(ms.특수_건수, 0) AS 특수_건수,\n    COALESCE(ms.이상_결과수, 0) AS 이상_결과수,\n    COALESCE(rr.최근_정기검진일, '') AS 최근_정기검진일,\n    CASE\n        WHEN ms.정기_건수 = 0 THEN '정기검진누락'\n        ELSE ''\n    END AS 정기검진_경고,\n    CASE\n        WHEN ms.이상_결과수 > 0 THEN '이상소견있음'\n        ELSE ''\n    END AS 이상_경고,\n    f.first_join_date AS 팀최초입사일,\n    tm.대상자수 AS 팀인원수,\n    tm.검진이력_보유자,\n    tm.검진비율\nFROM people p\nLEFT JOIN last_medical lm ON p.id = lm.id\nLEFT JOIN regular_medical rm ON p.id = rm.id\nLEFT JOIN medical_stats ms ON p.id = ms.id\nLEFT JOIN recent_regular rr ON p.id = rr.id\nLEFT JOIN first_joiner f ON p.team = f.team\nLEFT JOIN team_medical_rate tm ON p.team = tm.team\nWHERE p.team IS NOT NULL AND p.team <> ''\nORDER BY\n    정기검진_경고 DESC,\n    이상_경고 DESC,\n    p.team ASC,\n    p.name ASC\nLIMIT 100;",
+    "summary": {
+      "row_count": 100,
+      "columns": [
+        "id",
+        "name",
+        "birth",
+        "join_date",
+        "retire_date",
+        "team",
+        "line",
+        "position",
+        "last_medical_date",
+        "total_medical",
+        "regular_medical_count",
+        "all_medical_count",
+        "정기_건수",
+        "특수_건수",
+        "이상_결과수",
+        "최근_정기검진일",
+        "정기검진_경고",
+        "이상_경고",
+        "팀최초입사일",
+        "팀인원수",
+        "검진이력_보유자",
+        "검진비율"
+      ]
+    }
+  }
+]

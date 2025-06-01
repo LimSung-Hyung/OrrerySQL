@@ -1,0 +1,134 @@
+### Sheet 3
+SELECT 
+p.id, 
+p.name, 
+p.birth, 
+p.team, 
+p.line,
+m.type,
+m.date
+ FROM people p
+LEFT JOIN medical m
+ON p.id=m.id,
+ORDER BY p.id ASC;
+
+---TAB---
+
+### Sheet 4
+WITH recent_medical AS (
+    SELECT id, type, date
+    FROM medical
+    WHERE date > '2025-01-01'
+)
+
+SELECT p.id, p.name, p.birth, p.team, p.line, r.type, r.date
+FROM people AS p
+LEFT JOIN recent_medical AS r ON p.id = r.id
+ORDER BY p.id
+
+---TAB---
+
+### Sheet 1
+WITH last_medical AS (
+    SELECT
+        id,
+        MAX(date) AS last_medical_date
+    FROM medical
+    GROUP BY id
+),
+regular_medical AS (
+    SELECT
+        id,
+        COUNT(*) AS total_medical,
+        SUM(CASE WHEN type = '정기' THEN 1 ELSE 0 END) AS regular_count
+    FROM medical
+    GROUP BY id
+),
+first_joiner AS (
+    SELECT
+        team,
+        MIN(join_date) AS first_join_date
+    FROM people
+    WHERE team IS NOT NULL AND team <> ''
+    GROUP BY team
+),
+medical_stats AS (
+    SELECT
+        id,
+        COUNT(*) AS all_medical_count,
+        SUM(CASE WHEN type = '정기' THEN 1 ELSE 0 END) AS 정기_건수,
+        SUM(CASE WHEN type = '특수' THEN 1 ELSE 0 END) AS 특수_건수,
+        SUM(CASE WHEN result = '이상' THEN 1 ELSE 0 END) AS 이상_결과수
+    FROM medical
+    GROUP BY id
+),
+recent_regular AS (
+    SELECT
+        id,
+        MAX(date) AS 최근_정기검진일
+    FROM medical
+    WHERE type = '정기'
+    GROUP BY id
+),
+team_medical_rate AS (
+    SELECT
+        p.team,
+        COUNT(DISTINCT m.id) AS 대상자수,
+        SUM(CASE WHEN m.id IS NOT NULL THEN 1 ELSE 0 END) AS 검진이력_보유자,
+        ROUND(100.0 * SUM(CASE WHEN m.id IS NOT NULL THEN 1 ELSE 0 END) / COUNT(DISTINCT m.id), 2) AS 검진비율
+    FROM people p
+    LEFT JOIN medical m ON p.id = m.id
+    WHERE p.team IS NOT NULL AND p.team <> ''
+    GROUP BY p.team
+)
+SELECT
+    p.id,
+    p.name,
+    p.birth,
+    p.join_date,
+    p.retire_date,
+    p.team,
+    p.line,
+    p.position,
+    COALESCE(lm.last_medical_date, '') AS last_medical_date,
+    COALESCE(rm.total_medical, 0) AS total_medical,
+    COALESCE(rm.regular_count, 0) AS regular_medical_count,
+    COALESCE(ms.all_medical_count, 0) AS all_medical_count,
+    COALESCE(ms.정기_건수, 0) AS 정기_건수,
+    COALESCE(ms.특수_건수, 0) AS 특수_건수,
+    COALESCE(ms.이상_결과수, 0) AS 이상_결과수,
+    COALESCE(rr.최근_정기검진일, '') AS 최근_정기검진일,
+    CASE
+        WHEN ms.정기_건수 = 0 THEN '정기검진누락'
+        ELSE ''
+    END AS 정기검진_경고,
+    CASE
+        WHEN ms.이상_결과수 > 0 THEN '이상소견있음'
+        ELSE ''
+    END AS 이상_경고,
+    f.first_join_date AS 팀최초입사일,
+    tm.대상자수 AS 팀인원수,
+    tm.검진이력_보유자,
+    tm.검진비율
+FROM people p
+LEFT JOIN last_medical lm ON p.id = lm.id
+LEFT JOIN regular_medical rm ON p.id = rm.id
+LEFT JOIN medical_stats ms ON p.id = ms.id
+LEFT JOIN recent_regular rr ON p.id = rr.id
+LEFT JOIN first_joiner f ON p.team = f.team
+LEFT JOIN team_medical_rate tm ON p.team = tm.team
+WHERE p.team IS NOT NULL AND p.team <> ''
+ORDER BY
+    정기검진_경고 DESC,
+    이상_경고 DESC,
+    p.team ASC,
+    p.name ASC
+LIMIT 100;
+
+---TAB---
+
+### Sheet 2
+SELECT * FROM people
+
+---TAB---
+

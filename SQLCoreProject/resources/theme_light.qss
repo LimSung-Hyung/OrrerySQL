@@ -1,0 +1,191 @@
+/* 기본 위젯 스타일 */
+QWidget {
+    background-color: #f4f4f4;
+    color: #1e1e1e;
+    font-family: 'Segoe UI', '맑은 고딕';
+    font-size: 9pt;
+}
+
+/* 입력 필드 */
+QLineEdit, QTextEdit {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 2px;
+    padding: 6px;
+}
+
+/* 트리뷰 - 콘솔/DB 전용 예외 */
+QTreeView {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    alternate-background-color: #262626;
+}
+QTreeView::item:hover {
+    background: #2e2e2e;
+}
+QTreeView::item:selected {
+    background-color: #44475a;
+    color: white;
+}
+
+/* 툴바 */
+QToolBar {
+    background-color: #eaeaea;
+    padding: 0;
+    spacing: 0;
+    margin: 0;
+    border: none;
+}
+
+/* 툴버튼 */
+QToolButton {
+    background-color: #f0f0f0;
+    color: #202020;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    border-radius: 0;
+    padding: 6px 10px;
+    margin: 0;
+}
+QToolButton:first-of-type {
+    border-left: none;
+}
+QToolButton:hover {
+    background-color: #dddddd;
+}
+QToolButton:pressed {
+    background-color: #cccccc;
+}
+
+/* 탭 */
+QTabWidget::pane {
+    border-top: 1px solid #cccccc;
+    top: -1px;
+}
+QTabBar::tab {
+    background: #eaeaea;
+    color: #303030;
+    padding: 4px 6px;
+    min-width: 60px;
+    border: 1px solid #d0d0d0;
+    border-bottom: none;
+    border-radius: 0;
+}
+QTabBar::tab:selected {
+    background: #ffffff;
+    color: #000000;
+    font-weight: 600;
+    margin-bottom: -1px;
+    border-bottom: 1px solid #ffffff;
+}
+QTabBar::tab:hover {
+    background-color: #f5f5f5;
+}
+
+/* 탭 닫기 버튼 */
+QTabBar::close-button {
+    image: url(close_icon.png);
+    margin-left: 4px;
+    width: 16px;
+    height: 16px;
+    background: transparent;
+}
+QTabBar::close-button:hover {
+    background-color: #cc4444;
+    border-radius: 2px;
+}
+
+/* 메뉴바 */
+QMenuBar {
+    background-color: #f0f0f0;
+    color: #202020;
+}
+QMenuBar::item {
+    padding: 6px 12px;
+}
+QMenuBar::item:selected {
+    background-color: #d0d0d0;
+}
+QMenu {
+    background-color: #f8f8f8;
+    color: #1e1e1e;
+}
+QMenu::item:selected {
+    background-color: #d0d0d0;
+    color: #000000;
+}
+
+/* 테이블 */
+QTableWidget {
+    background-color: #ffffff;
+    color: #000000;
+    gridline-color: #cccccc;
+    font-family: 'Consolas', '맑은 고딕';
+    font-size: 9pt;
+}
+QHeaderView::section {
+    background-color: #f0f0f0;
+    color: #202020;
+    border-bottom: 1px solid #cccccc;
+    font-weight: 500;
+    padding: 6px 4px;
+}
+
+/* 셀 선택 */
+QTableView::item:selected,
+QTableWidget::item:selected {
+    background-color: #cce2ff;
+    color: #000000;
+}
+QTableView::item:hover:selected,
+QTableWidget::item:hover:selected {
+    background-color: #bbd8ff;
+    color: #000000;
+}
+
+/* 버튼 */
+QPushButton {
+    background-color: #eeeeee;
+    color: #202020;
+    border-radius: 2px;
+    padding: 6px 10px;
+}
+QPushButton:hover {
+    background-color: #dddddd;
+}
+QPushButton:pressed {
+    background-color: #cccccc;
+}
+
+/* 스크롤바 */
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: #f0f0f0;
+    border: none;
+    width: 12px;
+    height: 12px;
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: #bbbbbb;
+    border-radius: 6px;
+    min-height: 30px;
+}
+QScrollBar::handle:hover {
+    background: #999999;
+}
+
+/* 체크박스 */
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    background: #eeeeee;
+    border: 1px solid #aaaaaa;
+}
+QCheckBox::indicator:checked {
+    background-color: #448aff;
+    border: 1px solid #0066cc;
+}
+QCheckBox::indicator:unchecked:hover {
+    background-color: #dddddd;
+    border: 1px solid #999999;
+}
