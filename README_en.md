@@ -16,7 +16,6 @@ OrrerySQL is a GUI-based SQL development environment that helps you intuitively 
 - **CTE Analysis**: Interpret complex relationships in WITH clauses and subqueries
 
 ### 🎨 **User-Friendly Interface**
-- **Dark/Light Themes**: Developer-friendly theme selection
 - **Multi-language Support**: Dynamic Korean/English switching
 - **SQL Syntax Highlighting**: Keywords, table names, and column highlighting
 - **Auto-completion**: IntelliSense based on table and column names
@@ -155,7 +154,7 @@ This project is distributed under the MIT License. See `LICENSE` file for more i
 
 ## 👥 Development Team
 
-- **Main Developer**: [Your Name]
+- **Main Developer**: SungHyung-Lim & LLMs
 - **SQL Analysis Engine**: Advanced AST parsing with sqlglot
 - **UI/UX Design**: Modern dark theme with PySide6
 
