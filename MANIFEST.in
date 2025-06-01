@@ -1,0 +1,23 @@
+include README.md
+include README_en.md
+include LICENSE
+include requirements.txt
+include *.py
+include *.spec
+
+# Language packs
+recursive-include language *.py
+
+# Resources
+recursive-include SQLCoreProject/resources *
+
+# Data files
+include *.duckdb
+include *.db
+
+# Documentation
+include *.md
+
+# Configuration
+include *.json
+include *.txt 
